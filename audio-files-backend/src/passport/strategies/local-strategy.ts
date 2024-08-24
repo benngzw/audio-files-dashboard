@@ -1,9 +1,8 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
 
-import { User, UserModel } from "../../mongoose/schemas/user";
+import { UserModel } from "../../mongoose/schemas/user";
 import { comparePassword } from "../../utils/password";
-import { FlattenMaps, Types } from "mongoose";
 
 passport.serializeUser((user: any, done) => {
   done(null, user.id);

@@ -15,4 +15,11 @@ router.post(
 
 router.get("/", requireAdmin, userController.getUsers);
 
+router.put(
+  "/:id",
+  checkSchema(createUserValidationSchema),
+  requireAdmin,
+  userController.updateUser
+);
+
 export default router;

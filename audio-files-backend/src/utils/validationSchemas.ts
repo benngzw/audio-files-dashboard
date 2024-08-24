@@ -18,4 +18,7 @@ export const createUserValidationSchema = {
   password: {
     notEmpty: true,
   },
+  displayName: {
+    notEmpty: true,
+  },
 };
