@@ -34,8 +34,12 @@ export async function createUser(
 
   const newUser = new UserModel(data);
   try {
-    await newUser.save();
-    return res.status(201).send();
+    const newUserData = (await newUser.save()).toObject();
+    return res.status(201).send({
+      id: newUserData._id,
+      username: newUserData.username,
+      displayName: newUserData.displayName,
+    });
   } catch (err) {
     return res.status(400).send({ errors: [{ msg: "Failed to create user" }] });
   }
@@ -59,6 +63,18 @@ export async function updateUser(
     await UserModel.findByIdAndUpdate(req.params.id, data);
     return res.status(200).send();
   } catch (err) {
-    return res.status(400).send({ errors: [{ msg: "Failed to create user" }] });
+    return res.status(400).send({ errors: [{ msg: "Failed to update user" }] });
+  }
+}
+
+export async function deleteUser(
+  req: Request,
+  res: Response
+): Promise<Response> {
+  try {
+    await UserModel.findByIdAndDelete(req.params.id);
+    return res.status(200).send();
+  } catch (err) {
+    return res.status(400).send({ errors: [{ msg: "Failed to delete user" }] });
   }
 }
