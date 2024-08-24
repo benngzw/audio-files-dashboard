@@ -20,7 +20,6 @@ passport.deserializeUser(async (id, done) => {
 
 export default passport.use(
   new Strategy(async (username, password, done) => {
-    console.log(`username: ${username}, password: ${password}`);
     try {
       const findUser = await UserModel.findOne({ username });
       if (!findUser) throw new Error("User not found");

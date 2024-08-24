@@ -2,6 +2,8 @@ import express from "express";
 import session from "express-session";
 import passport from "passport";
 import dotenv from "dotenv";
+import MongoStore from "connect-mongo";
+import mongoose from "mongoose";
 
 import routes from "./routes";
 
@@ -19,6 +21,9 @@ export function createApp() {
       cookie: {
         maxAge: 60000 * 60,
       },
+      store: MongoStore.create({
+        client: mongoose.connection.getClient(),
+      }),
     })
   );
 
