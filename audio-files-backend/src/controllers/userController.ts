@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { matchedData, validationResult } from "express-validator";
 import { hashPassword } from "../utils/password";
-import { UserModel } from "../mongoose/schemas/user";
+import { User, UserModel } from "../mongoose/schemas/user";
 
 export async function createUser(
   req: Request,
@@ -30,4 +30,15 @@ export async function createUser(
       .sendStatus(400)
       .send({ errors: [{ msg: "Failed to create user" }] });
   }
+}
+
+export async function getUsers(req: Request, res: Response): Promise<Response> {
+  const users = (await UserModel.find().select("username").lean()).map(
+    (user) => ({
+      id: user._id,
+      username: user.username,
+    })
+  );
+
+  return res.status(200).send(users);
 }

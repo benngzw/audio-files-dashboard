@@ -1,8 +1,9 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
 
-import { UserModel } from "../../mongoose/schemas/user";
+import { User, UserModel } from "../../mongoose/schemas/user";
 import { comparePassword } from "../../utils/password";
+import { FlattenMaps, Types } from "mongoose";
 
 passport.serializeUser((user: any, done) => {
   done(null, user.id);
@@ -10,7 +11,7 @@ passport.serializeUser((user: any, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const findUser = await UserModel.findById(id);
+    const findUser = await UserModel.findById(id).lean();
     if (!findUser) throw new Error("User Not Found");
     done(null, findUser);
   } catch (err) {

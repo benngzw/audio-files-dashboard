@@ -4,6 +4,7 @@ export interface User {
   username: string;
   password: string;
   displayName: string;
+  isAdmin: boolean;
 }
 
 const UserSchema = new mongoose.Schema({
