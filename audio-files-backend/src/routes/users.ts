@@ -9,6 +9,8 @@ const router = Router();
 
 router.get("/", requireAdmin, userController.getUsers);
 
+router.get("/:id", requireAdmin, userController.getUser);
+
 router.post(
   "/",
   checkSchema(createUserValidationSchema),

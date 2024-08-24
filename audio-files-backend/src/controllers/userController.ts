@@ -14,6 +14,17 @@ export async function getUsers(req: Request, res: Response): Promise<Response> {
   return res.status(200).send(users);
 }
 
+export async function getUser(req: Request, res: Response): Promise<Response> {
+  const user = await UserModel.findById(req.params.id);
+  if (!user) return res.status(404).send({ error: "User not found" });
+
+  return res.status(200).send({
+    id: user._id,
+    username: user.username,
+    displayName: user.displayName,
+  });
+}
+
 export async function createUser(
   req: Request,
   res: Response
@@ -60,8 +71,14 @@ export async function updateUser(
   }
 
   try {
-    await UserModel.findByIdAndUpdate(req.params.id, data);
-    return res.status(200).send();
+    const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, data, {
+      new: true,
+    });
+    return res.status(200).send({
+      id: updatedUser?._id,
+      username: updatedUser?.username,
+      displayName: updatedUser?.displayName,
+    });
   } catch (err) {
     return res.status(400).send({ errors: [{ msg: "Failed to update user" }] });
   }
