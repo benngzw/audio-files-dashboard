@@ -7,28 +7,25 @@ import { requireAdmin, validateUserExists } from "../utils/middlewares";
 
 const router = Router();
 
-router.get("/", requireAdmin, userController.getUsers);
+router.use(requireAdmin);
 
-router.get("/:id", requireAdmin, userController.getUser);
+router.get("/", userController.getUsers);
+
+router.get("/:id", userController.getUser);
 
 router.post(
   "/",
   checkSchema(createUserValidationSchema),
-  requireAdmin,
   userController.createUser
 );
 
 router.put(
   "/:id",
   checkSchema(createUserValidationSchema),
-  [requireAdmin, validateUserExists],
+  validateUserExists,
   userController.updateUser
 );
 
-router.delete(
-  "/:id",
-  [requireAdmin, validateUserExists],
-  userController.deleteUser
-);
+router.delete("/:id", validateUserExists, userController.deleteUser);
 
 export default router;
