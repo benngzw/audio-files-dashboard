@@ -44,34 +44,20 @@ export function requireUser(
 }
 
 /**
- * Middleware function that checks if the user is an admin or the same as the user in the request parameters.
- * If the user is not the same, it sends a 401 status code.
- * Otherwise, it calls the next middleware function.
- *
+ * Middleware function that checks if the current user is the owner of the resource or an admin.
+ * If the user is not authenticated or does not have the necessary permissions, an UnauthorizedError is thrown.
  * @param req - The Express request object.
  * @param res - The Express response object.
- * @param next - The next middleware function.
+ * @param next - The next function to be called in the middleware chain.
  * @returns The Express response object or void.
  */
-export async function requireCurrentUserOrAdmin(
+export function requireCurrentUserOrAdmin(
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response | void> {
+): Response | void {
   const user = req.user as User;
-  let paramUser;
-  try {
-    paramUser = await UserModel.findById(req.params.id);
-  } catch (err) {
-    return res.status(404).send({ error: "User not found" });
-  }
-
-  console.log(user.id.toString());
-  console.log(paramUser?.id.toString());
-  if (
-    !user ||
-    (paramUser?.id.toString() !== user.id.toString() && !user.isAdmin)
-  )
+  if (!user || (req.params.id !== user.id.toString() && !user.isAdmin))
     throw new UnauthorizedError();
   next();
 }
