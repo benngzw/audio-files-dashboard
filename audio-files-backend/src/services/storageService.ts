@@ -68,7 +68,7 @@ export async function uploadFile(
 export async function getFile(client: Client, storagePath: string) {
   try {
     const file = await client.getObject(AUDIO_BUCKET, storagePath);
-    console.log(`File ${storagePath} deleted successfully`);
+    console.log(`File ${storagePath} retrieved successfully`);
     return file;
   } catch (err) {
     console.error(`Error retrieving file ${storagePath}:`, err);

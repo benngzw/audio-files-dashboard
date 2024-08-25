@@ -56,6 +56,6 @@ export async function validateUserExists(
   next: NextFunction
 ): Promise<Response | void> {
   const user = await UserModel.findById(req.params.id);
-  if (!user) return res.status(404).send({ msg: "User not found" });
+  if (!user) return res.status(404).send({ error: "User not found" });
   next();
 }

@@ -10,10 +10,10 @@ export async function uploadAudioFiles(req: Request, res: Response) {
   const { files } = req;
   const user = req.user as User;
   if (!files || !Array.isArray(files) || files.length === 0)
-    return res.status(400).send({ msg: "No file uploaded" });
+    return res.status(400).send({ error: "No file uploaded" });
 
   try {
-    await Promise.all(
+    const uploadedAudioFiles = await Promise.all(
       files.map(async (file: Express.Multer.File) => {
         const storagePath = await StorageService.uploadFile(
           storageClient,
@@ -28,13 +28,22 @@ export async function uploadAudioFiles(req: Request, res: Response) {
           storagePath,
         });
 
-        await audioMetadata.save();
+        return await audioMetadata.save();
       })
     );
-    return res.status(201).send({ msg: "File uploaded successfully" });
+    return res.status(201).send(
+      uploadedAudioFiles.map((file) => {
+        return {
+          id: file._id,
+          fileName: file.fileName,
+          mimeType: file.mimeType,
+          size: file.size,
+        };
+      })
+    );
   } catch (err) {
     console.error(err);
-    return res.status(500).send({ msg: "Error uploading file" });
+    return res.status(500).send({ error: "Error uploading file" });
   }
 }
 
@@ -60,20 +69,23 @@ export async function streamAudioFile(req: Request, res: Response) {
   const user = req.user as User;
 
   try {
+    console.log("I am here");
     const audioFile = await AudioFileModel.findById(req.params.id);
+    console.log(audioFile);
     if (!audioFile || audioFile.userId.toString() !== user.id.toString())
-      return res.status(404).send({ msg: "File not found" });
+      return res.status(404).send({ error: "File not found" });
 
-    const stream = await storageClient.getObject(
-      "audio",
+    console.log(audioFile.storagePath);
+    const file = await StorageService.getFile(
+      storageClient,
       audioFile.storagePath
     );
 
     res.setHeader("Content-Type", audioFile.mimeType);
-    stream.pipe(res);
+    file.pipe(res);
   } catch (err) {
     console.error(err);
-    return res.status(500).send({ msg: "Error streaming file" });
+    return res.status(500).send({ error: "Error streaming file" });
   }
 }
 
@@ -83,8 +95,9 @@ export async function downloadAudioFile(req: Request, res: Response) {
   try {
     const audioFile = await AudioFileModel.findById(req.params.id);
     if (!audioFile || audioFile.userId.toString() !== user.id.toString())
-      return res.status(404).send({ msg: "File not found" });
+      return res.status(404).send({ error: "File not found" });
 
+    console.log(audioFile.storagePath);
     const file = await StorageService.getFile(
       storageClient,
       audioFile.storagePath
@@ -98,7 +111,7 @@ export async function downloadAudioFile(req: Request, res: Response) {
     file.pipe(res);
   } catch (err) {
     console.error(err);
-    return res.status(500).send({ msg: "Error downloading file" });
+    return res.status(500).send({ error: "Error downloading file" });
   }
 }
 
@@ -108,14 +121,14 @@ export async function deleteAudioFile(req: Request, res: Response) {
   try {
     const audioFile = await AudioFileModel.findById(req.params.id);
     if (!audioFile || audioFile.userId.toString() !== user.id.toString())
-      return res.status(404).send({ msg: "File not found" });
+      return res.status(404).send({ error: "File not found" });
 
     await audioFile.deleteOne();
     await StorageService.deleteFile(storageClient, audioFile.storagePath);
 
-    return res.status(200).send({ msg: "File deleted successfully" });
+    return res.status(204).send();
   } catch (err) {
     console.error(err);
-    return res.status(500).send({ msg: "Error deleting file" });
+    return res.status(500).send({ error: "Error deleting file" });
   }
 }
