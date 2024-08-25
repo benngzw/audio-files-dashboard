@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
 
-import * as userController from "../controllers/userController";
+import { userController } from "../controllers";
 import { createUserValidationSchema } from "../utils/validationSchemas";
 import { requireAdmin, validateUserExists } from "../utils/middlewares";
 

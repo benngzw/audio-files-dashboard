@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import * as audioController from "../controllers/audioController";
+import { audioController } from "../controllers";
 import { requireUser, upload, uploadErrorHandler } from "../utils/middlewares";
 
 const router = Router();

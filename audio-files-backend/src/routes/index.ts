@@ -1,12 +1,12 @@
 import { Router } from "express";
-import audioRouter from "./audio";
-import authRouter from "./auth";
-import usersRouter from "./users";
+import audioRouter from "./audioRoutes";
+import authRouter from "./authRoutes";
+import userRouter from "./userRoutes";
 
 const router = Router();
 
 router.use("/audio", audioRouter);
 router.use("/auth", authRouter);
-router.use("/users", usersRouter);
+router.use("/users", userRouter);
 
 export default router;
