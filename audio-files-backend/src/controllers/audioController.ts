@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import { createStorageClient, uploadFile } from "../services/objectStorage";
-import { User } from "../mongoose/schemas/user";
-import { AudioFileModel } from "../mongoose/schemas/audio";
 
-const minioClient = createStorageClient();
+import * as StorageService from "../services/storageService";
+import { User } from "../models/userModel";
+import { AudioFileModel } from "../models/audioModel";
+
+const storageClient = StorageService.createStorageClient();
 
 export async function uploadAudioFiles(req: Request, res: Response) {
   const { files } = req;
@@ -14,7 +15,11 @@ export async function uploadAudioFiles(req: Request, res: Response) {
   try {
     await Promise.all(
       files.map(async (file: Express.Multer.File) => {
-        const storagePath = await uploadFile(minioClient, user.id, file);
+        const storagePath = await StorageService.uploadFile(
+          storageClient,
+          user.id,
+          file
+        );
         const audioMetadata = new AudioFileModel({
           userId: user.id,
           fileName: file.originalname,
@@ -59,7 +64,10 @@ export async function streamAudioFile(req: Request, res: Response) {
     if (!audioFile || audioFile.userId.toString() !== user.id.toString())
       return res.status(404).send({ msg: "File not found" });
 
-    const stream = await minioClient.getObject("audio", audioFile.storagePath);
+    const stream = await storageClient.getObject(
+      "audio",
+      audioFile.storagePath
+    );
 
     res.setHeader("Content-Type", audioFile.mimeType);
     stream.pipe(res);
@@ -77,14 +85,17 @@ export async function downloadAudioFile(req: Request, res: Response) {
     if (!audioFile || audioFile.userId.toString() !== user.id.toString())
       return res.status(404).send({ msg: "File not found" });
 
-    const stream = await minioClient.getObject("audio", audioFile.storagePath);
+    const file = await StorageService.getFile(
+      storageClient,
+      audioFile.storagePath
+    );
 
     res.setHeader(
       "Content-Disposition",
       `attachment; filename="${audioFile.fileName}"`
     );
     res.setHeader("Content-Type", audioFile.mimeType);
-    stream.pipe(res);
+    file.pipe(res);
   } catch (err) {
     console.error(err);
     return res.status(500).send({ msg: "Error downloading file" });

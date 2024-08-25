@@ -1,31 +1,31 @@
 import { Router } from "express";
 import { checkSchema } from "express-validator";
 
-import { userController } from "../controllers";
+import * as UserController from "../controllers/userController";
 import { createUserValidationSchema } from "../utils/validationSchemas";
-import { requireAdmin, validateUserExists } from "../utils/middlewares";
+import { requireAdmin, validateUserExists } from "../middlewares";
 
 const router = Router();
 
 router.use(requireAdmin);
 
-router.get("/", userController.getUsers);
+router.get("/", UserController.getUsers);
 
-router.get("/:id", userController.getUser);
+router.get("/:id", UserController.getUser);
 
 router.post(
   "/",
   checkSchema(createUserValidationSchema),
-  userController.createUser
+  UserController.createUser
 );
 
 router.put(
   "/:id",
   checkSchema(createUserValidationSchema),
   validateUserExists,
-  userController.updateUser
+  UserController.updateUser
 );
 
-router.delete("/:id", validateUserExists, userController.deleteUser);
+router.delete("/:id", validateUserExists, UserController.deleteUser);
 
 export default router;

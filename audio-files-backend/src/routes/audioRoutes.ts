@@ -1,19 +1,19 @@
 import { Router } from "express";
 
-import { audioController } from "../controllers";
-import { requireUser, upload, uploadErrorHandler } from "../utils/middlewares";
+import * as AudioController from "../controllers/audioController";
+import { requireUser, upload, uploadErrorHandler } from "../middlewares";
 
 const router = Router();
 
 router.use(requireUser);
 
-router.post("/", upload.array("file"), audioController.uploadAudioFiles);
+router.post("/", upload.array("file"), AudioController.uploadAudioFiles);
 
-router.get("/", audioController.getAudioFiles);
+router.get("/", AudioController.getAudioFiles);
 
-router.get("/:id/stream", audioController.streamAudioFile);
+router.get("/:id/stream", AudioController.streamAudioFile);
 
-router.get("/:id/download", audioController.downloadAudioFile);
+router.get("/:id/download", AudioController.downloadAudioFile);
 
 router.use(uploadErrorHandler);
 

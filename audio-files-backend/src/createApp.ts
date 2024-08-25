@@ -6,6 +6,7 @@ import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
 
 import routes from "./routes";
+import "./middlewares/passportMiddleware";
 
 dotenv.config();
 

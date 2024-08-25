@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 
-import * as DatabaseService from "./services/database";
-import "./passport/strategies/local-strategy";
+import * as DatabaseService from "./services/databaseService";
+
 import { createApp } from "./createApp";
 
 dotenv.config();

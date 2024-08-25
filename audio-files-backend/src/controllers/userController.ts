@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { matchedData, validationResult } from "express-validator";
 import { hashPassword } from "../utils/password";
-import { UserModel } from "../mongoose/schemas/user";
+import { UserModel } from "../models/userModel";
 
 export async function getUsers(req: Request, res: Response): Promise<Response> {
   const users = (await UserModel.find().select("username").lean()).map(
     (user) => ({
       id: user._id,
       username: user.username,
+      displayName: user.displayName,
     })
   );
 
