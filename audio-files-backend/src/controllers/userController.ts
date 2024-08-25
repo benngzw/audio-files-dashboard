@@ -5,7 +5,7 @@ import { UserModel } from "../models/userModel";
 
 export async function getUsers(req: Request, res: Response): Promise<Response> {
   try {
-    const users = await UserModel.find().select("username").lean();
+    const users = await UserModel.find().lean();
 
     return res.status(200).send(
       users.map((user) => ({

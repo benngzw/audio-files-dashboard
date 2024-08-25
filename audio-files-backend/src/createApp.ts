@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import session from "express-session";
 import passport from "passport";
 import dotenv from "dotenv";
@@ -7,6 +7,8 @@ import mongoose from "mongoose";
 
 import routes from "./routes";
 import "./middlewares/passportMiddleware";
+import { InvalidCredentialsError } from "./errors";
+import { errorHandler } from "./middlewares";
 
 dotenv.config();
 
@@ -31,6 +33,7 @@ export function createApp() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(routes);
+  app.use(errorHandler);
 
   return app;
 }

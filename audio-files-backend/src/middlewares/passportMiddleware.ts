@@ -3,6 +3,7 @@ import { Strategy } from "passport-local";
 
 import { UserModel } from "../models/userModel";
 import { comparePassword } from "../utils/password";
+import { InvalidCredentialsError } from "../errors";
 
 passport.serializeUser((user: any, done) => {
   done(null, user.id);
@@ -28,9 +29,8 @@ export default passport.use(
   new Strategy(async (username, password, done) => {
     try {
       const findUser = await UserModel.findOne({ username });
-      if (!findUser) throw new Error("User not found");
-      if (!comparePassword(password, findUser.password))
-        throw new Error("Bad Credentials");
+      if (!findUser || !comparePassword(password, findUser.password))
+        throw new InvalidCredentialsError();
       done(null, findUser);
     } catch (err) {
       done(err, false);

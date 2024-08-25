@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 import { User, UserModel } from "../models/userModel";
+import { UnauthorizedError } from "../errors";
 
 /**
  * Middleware function that checks if the user is an admin.
@@ -18,7 +19,7 @@ export function requireAdmin(
   next: NextFunction
 ): Response | void {
   const user = req.user as User;
-  if (!user || !user.isAdmin) return res.sendStatus(401);
+  if (!user || !user.isAdmin) throw new UnauthorizedError();
   next();
 }
 
@@ -38,7 +39,7 @@ export function requireUser(
   next: NextFunction
 ): Response | void {
   const user = req.user as User;
-  if (!user) return res.sendStatus(401);
+  if (!user) throw new UnauthorizedError();
   next();
 }
 
@@ -71,6 +72,6 @@ export async function requireCurrentUserOrAdmin(
     !user ||
     (paramUser?.id.toString() !== user.id.toString() && !user.isAdmin)
   )
-    return res.sendStatus(401);
+    throw new UnauthorizedError();
   next();
 }
