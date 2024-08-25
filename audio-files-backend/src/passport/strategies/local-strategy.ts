@@ -12,7 +12,13 @@ passport.deserializeUser(async (id, done) => {
   try {
     const findUser = await UserModel.findById(id).lean();
     if (!findUser) throw new Error("User Not Found");
-    done(null, findUser);
+    done(null, {
+      id: findUser._id,
+      username: findUser.username,
+      password: findUser.password,
+      displayName: findUser.displayName,
+      isAdmin: findUser.isAdmin,
+    });
   } catch (err) {
     done(err, null);
   }
