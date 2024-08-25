@@ -5,7 +5,7 @@ import { AudioFileModel } from "../mongoose/schemas/audio";
 
 const minioClient = createStorageClient();
 
-export async function uploadAudio(req: Request, res: Response) {
+export async function uploadAudioFiles(req: Request, res: Response) {
   const { files } = req;
   const user = req.user as User;
   if (!files || !Array.isArray(files) || files.length === 0)
@@ -31,4 +31,13 @@ export async function uploadAudio(req: Request, res: Response) {
     console.error(err);
     return res.status(500).send({ msg: "Error uploading file" });
   }
+}
+
+export async function getAudioFiles(req: Request, res: Response) {
+  const user = req.user as User;
+  const audioFiles = await AudioFileModel.find({ userId: user.id })
+    .select("-_id fileName mimeType size")
+    .lean();
+
+  return res.status(200).send(audioFiles);
 }

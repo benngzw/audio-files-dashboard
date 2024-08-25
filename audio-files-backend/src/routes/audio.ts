@@ -7,7 +7,9 @@ const router = Router();
 
 router.use(requireUser);
 
-router.post("/upload", upload.array("file"), audioController.uploadAudio);
+router.post("/", upload.array("file"), audioController.uploadAudioFiles);
+
+router.get("/", audioController.getAudioFiles);
 
 router.use(uploadErrorHandler);
 

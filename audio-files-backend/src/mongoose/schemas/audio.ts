@@ -4,6 +4,9 @@ export interface AudioFile {
   userId: string;
   fileName: string;
   uploadDate: Date;
+  mimeType: string;
+  size: number;
+  storagePath: string;
 }
 
 const AudioFileSchema = new Schema({
