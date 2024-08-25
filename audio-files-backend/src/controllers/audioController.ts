@@ -68,3 +68,25 @@ export async function streamAudioFile(req: Request, res: Response) {
     return res.status(500).send({ msg: "Error streaming file" });
   }
 }
+
+export async function downloadAudioFile(req: Request, res: Response) {
+  const user = req.user as User;
+
+  try {
+    const audioFile = await AudioFileModel.findById(req.params.id);
+    if (!audioFile || audioFile.userId.toString() !== user.id.toString())
+      return res.status(404).send({ msg: "File not found" });
+
+    const stream = await minioClient.getObject("audio", audioFile.storagePath);
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${audioFile.fileName}"`
+    );
+    res.setHeader("Content-Type", audioFile.mimeType);
+    stream.pipe(res);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ msg: "Error downloading file" });
+  }
+}
