@@ -69,13 +69,10 @@ export async function streamAudioFile(req: Request, res: Response) {
   const user = req.user as User;
 
   try {
-    console.log("I am here");
     const audioFile = await AudioFileModel.findById(req.params.id);
-    console.log(audioFile);
     if (!audioFile || audioFile.userId.toString() !== user.id.toString())
       return res.status(404).send({ error: "File not found" });
 
-    console.log(audioFile.storagePath);
     const file = await StorageService.getFile(
       storageClient,
       audioFile.storagePath
@@ -97,7 +94,6 @@ export async function downloadAudioFile(req: Request, res: Response) {
     if (!audioFile || audioFile.userId.toString() !== user.id.toString())
       return res.status(404).send({ error: "File not found" });
 
-    console.log(audioFile.storagePath);
     const file = await StorageService.getFile(
       storageClient,
       audioFile.storagePath
