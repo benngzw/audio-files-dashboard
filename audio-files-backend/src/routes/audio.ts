@@ -11,6 +11,8 @@ router.post("/", upload.array("file"), audioController.uploadAudioFiles);
 
 router.get("/", audioController.getAudioFiles);
 
+router.get("/:id/stream", audioController.streamAudioFile);
+
 router.use(uploadErrorHandler);
 
 export default router;
