@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 
 import { User, UserModel } from "../models/userModel";
-import { UnauthorizedError } from "../errors";
+import { AccessDeniedError, UnauthorizedError } from "../errors";
 
 /**
  * Middleware function that checks if the user is an admin.
- * If the user is not an admin, it sends a 401 status code.
+ * If the user is not an admin, it sends a 403 status code.
  * Otherwise, it calls the next middleware function.
  *
  * @param req - The Express request object.
@@ -19,7 +19,8 @@ export function requireAdmin(
   next: NextFunction
 ): Response | void {
   const user = req.user as User;
-  if (!user || !user.isAdmin) throw new UnauthorizedError();
+  if (!user) throw new UnauthorizedError();
+  if (!user.isAdmin) throw new AccessDeniedError();
   next();
 }
 
@@ -57,7 +58,8 @@ export function requireCurrentUserOrAdmin(
   next: NextFunction
 ): Response | void {
   const user = req.user as User;
-  if (!user || (req.params.id !== user.id.toString() && !user.isAdmin))
-    throw new UnauthorizedError();
+  if (!user) throw new UnauthorizedError();
+  if (req.params.id !== user.id.toString() && !user.isAdmin)
+    throw new AccessDeniedError();
   next();
 }

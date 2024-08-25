@@ -30,7 +30,8 @@ export async function getUser(req: Request, res: Response): Promise<Response> {
       displayName: user.displayName,
     });
   } catch (err) {
-    return res.status(400).send({ error: "Failed to retrieve user" });
+    console.log(err);
+    return res.status(404).send({ error: "User not found" });
   }
 }
 

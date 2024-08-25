@@ -7,11 +7,9 @@ export function errorHandler(
   next: NextFunction
 ) {
   if (err) {
-    console.log("Error handled: ", err);
     const status = err.status || 500;
     const message = err.message || "Internal Server Error";
+    console.log(`Error handled. status: ${status} message: ${err.message}`);
     return res.status(status).send({ error: message });
-  } else {
-    next();
   }
 }
