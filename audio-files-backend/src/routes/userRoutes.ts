@@ -3,15 +3,13 @@ import { checkSchema } from "express-validator";
 
 import * as UserController from "../controllers/userController";
 import { createUserValidationSchema } from "../utils/validationSchemas";
-import { requireAdmin, validateUserExists } from "../middlewares";
+import { requireAdmin, requireCurrentUserOrAdmin } from "../middlewares";
 
 const router = Router();
 
-router.use(requireAdmin);
+router.get("/", requireAdmin, UserController.getUsers);
 
-router.get("/", UserController.getUsers);
-
-router.get("/:id", UserController.getUser);
+router.get("/:id", requireAdmin, UserController.getUser);
 
 router.post(
   "/",
@@ -22,10 +20,10 @@ router.post(
 router.put(
   "/:id",
   checkSchema(createUserValidationSchema),
-  validateUserExists,
+  requireCurrentUserOrAdmin,
   UserController.updateUser
 );
 
-router.delete("/:id", validateUserExists, UserController.deleteUser);
+router.delete("/:id", requireCurrentUserOrAdmin, UserController.deleteUser);
 
 export default router;
