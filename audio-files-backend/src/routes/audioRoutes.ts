@@ -15,6 +15,8 @@ router.get("/:id/stream", AudioController.streamAudioFile);
 
 router.get("/:id/download", AudioController.downloadAudioFile);
 
+router.delete("/:id", AudioController.deleteAudioFile);
+
 router.use(uploadErrorHandler);
 
 export default router;

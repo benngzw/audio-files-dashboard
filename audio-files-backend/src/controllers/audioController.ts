@@ -101,3 +101,21 @@ export async function downloadAudioFile(req: Request, res: Response) {
     return res.status(500).send({ msg: "Error downloading file" });
   }
 }
+
+export async function deleteAudioFile(req: Request, res: Response) {
+  const user = req.user as User;
+
+  try {
+    const audioFile = await AudioFileModel.findById(req.params.id);
+    if (!audioFile || audioFile.userId.toString() !== user.id.toString())
+      return res.status(404).send({ msg: "File not found" });
+
+    await audioFile.deleteOne();
+    await StorageService.deleteFile(storageClient, audioFile.storagePath);
+
+    return res.status(200).send({ msg: "File deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ msg: "Error deleting file" });
+  }
+}
