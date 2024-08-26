@@ -46,6 +46,7 @@ router.post("/login", passport.authenticate("local"), (req, res) => {
     id: user.isAdmin,
     username: user.username,
     displayName: user.displayName,
+    isAdmin: user.isAdmin,
   });
 });
 

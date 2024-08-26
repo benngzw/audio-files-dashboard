@@ -1,18 +1,32 @@
 "use client";
 
 import React, { useState } from 'react'
+import axios from 'axios';
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/providers/AuthProvider';
 
 const AuthForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const auth = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log('Username:', username);
-    console.log('Password:', password);
+    console.log("I am here");
+    auth.loginAction(username, password);
+    // const response = await axios.post('http://localhost:3000/auth/login', {
+    //   username,
+    //   password,
+    // }, {
+    //   withCredentials: true
+    // })
+    // console.log(response.data);
+    // const anotherResponse = await axios.get("http://localhost:3000/auth/status", {
+    //   withCredentials: true
+    // })
+    // console.log(anotherResponse.data);
   };
 
   return (

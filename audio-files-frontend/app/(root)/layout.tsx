@@ -1,3 +1,5 @@
+import AuthProvider from "@/providers/AuthProvider";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -6,7 +8,9 @@ export default async function RootLayout({
   return (
     <main className="flex h-screen w-full font-inter">
       <div className="flex size-full flex-col p-10">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </div>
     </main>
   );
