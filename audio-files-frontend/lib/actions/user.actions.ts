@@ -25,6 +25,7 @@ export async function login(username: string, password: string) {
     // console.log(response.data);
 
     const setCookieHeader = response.headers["set-cookie"];
+    console.log(setCookieHeader);
 
     let cookiesString = "";
 
@@ -35,7 +36,7 @@ export async function login(username: string, password: string) {
       setCookieHeader.forEach((cookieString: string) => {
         const [cookieNameValue, ...cookieAttributes] = cookieString.split("; ");
         const [cookieName, cookieValue] = cookieNameValue.split("=");
-        cookies().set("backend.connect.sid", cookieValue, {
+        cookies().set("connect.sid", cookieValue, {
           path: "/",
           ...Object.fromEntries(
             cookieAttributes.map((attr) => attr.split("="))
@@ -43,6 +44,7 @@ export async function login(username: string, password: string) {
         });
       });
     }
+
     console.log(`cookiesString: ${cookiesString}`);
     // console.log(`cookiesString: ${cookiesString}`);
 
@@ -63,10 +65,9 @@ export async function login(username: string, password: string) {
 
 export async function getCurrentUser() {
   console.log("getCurrentUser");
-  const backendCookie = `connect.sid=${
-    cookies().get("backend.connect.sid")?.value
-  }`;
+  const backendCookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
   console.log(`backendCookie: ${backendCookie}; `);
+  console.log(cookies().getAll());
 
   try {
     const anotherResponse = await axios.get(
