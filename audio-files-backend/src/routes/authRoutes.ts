@@ -43,7 +43,7 @@ router.post("/login", passport.authenticate("local"), (req, res) => {
   console.log(req.user);
   const user = req.user as User;
   res.status(200).send({
-    id: user.isAdmin,
+    id: user.id,
     username: user.username,
     displayName: user.displayName,
     isAdmin: user.isAdmin,
