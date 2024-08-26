@@ -76,6 +76,8 @@ router.post("/logout", (req, res) => {
 
 // TODO: Remove after testing
 router.get("/status", (req, res) => {
+  console.log("/auth/status called");
+  console.log(req.user);
   return req.user ? res.send(req.user) : res.sendStatus(401);
 });
 
