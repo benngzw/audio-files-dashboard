@@ -5,6 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 dotenv.config();
 
 const AUDIO_BUCKET = process.env.MINIO_AUDIO_BUCKET || "audio";
+const MINIO_ENDPOINT = process.env.MINIO_ENDPOINT || "localhost";
+const MINIO_ROOT_USER = process.env.MINIO_ROOT_USER || "admin";
+const MINIO_ROOT_PASSWORD = process.env.MINIO_ROOT_PASSWORD || "password123";
 
 /**
  * Creates a storage client for accessing the audio files storage.
@@ -13,11 +16,11 @@ const AUDIO_BUCKET = process.env.MINIO_AUDIO_BUCKET || "audio";
 export function createStorageClient(): Client {
   console.log("Creating storage client");
   return new Client({
-    endPoint: "localhost",
+    endPoint: MINIO_ENDPOINT,
     port: 9000,
     useSSL: false,
-    accessKey: process.env.MINIO_ROOT_USER || "admin",
-    secretKey: process.env.MINIO_ROOT_PASSWORD || "password123",
+    accessKey: MINIO_ROOT_USER,
+    secretKey: MINIO_ROOT_PASSWORD,
   });
 }
 

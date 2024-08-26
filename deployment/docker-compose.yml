@@ -22,3 +22,20 @@ services:
     volumes:
       - ./minio/data:/data
       - ./minio/config:/root/.minio
+
+  audio-files-backend:
+    image: audio-files-backend
+    restart: always
+    container_name: audio-files-backend
+    ports:
+      - 3000:3000
+    environment:
+      FILE_COUNT_LIMIT: 3
+      FILE_SIZE_LIMIT: 10000000
+      MINIO_ENDPOINT: minio
+      MINIO_AUDIO_BUCKET: audio
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password123
+      MONGODB_HOST: mongo
+      SESSION_SECRET: 12345678
+      

@@ -1,0 +1,10 @@
+node_modules
+deployment
+dist
+jest.config.js
+Dockerfile
+README.md
+.env
+.env-local
+.git
+.gitignore
