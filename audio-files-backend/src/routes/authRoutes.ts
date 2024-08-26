@@ -1,5 +1,6 @@
 import passport from "passport";
 import { Router } from "express";
+import { User } from "../models/userModel";
 
 const router = Router();
 
@@ -37,8 +38,15 @@ const router = Router();
  *       403:
  *         description: Access denied
  */
+// TODO: Update swagger responses
 router.post("/login", passport.authenticate("local"), (req, res) => {
-  res.sendStatus(200);
+  console.log(req.user);
+  const user = req.user as User;
+  res.status(200).send({
+    id: user.isAdmin,
+    username: user.username,
+    displayName: user.displayName,
+  });
 });
 
 /**

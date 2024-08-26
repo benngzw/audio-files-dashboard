@@ -31,7 +31,13 @@ export default passport.use(
       const findUser = await UserModel.findOne({ username });
       if (!findUser || !comparePassword(password, findUser.password))
         throw new InvalidCredentialsError();
-      done(null, findUser);
+      done(null, {
+        id: findUser._id,
+        username: findUser.username,
+        password: findUser.password,
+        displayName: findUser.displayName,
+        isAdmin: findUser.isAdmin,
+      });
     } catch (err) {
       done(err, false);
     }

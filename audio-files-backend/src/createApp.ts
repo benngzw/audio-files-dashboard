@@ -4,16 +4,25 @@ import passport from "passport";
 import dotenv from "dotenv";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
+import cors from "cors";
 
 import routes from "./routes";
 import "./middlewares/passportMiddleware";
 import { InvalidCredentialsError } from "./errors";
 import { errorHandler } from "./middlewares";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 export function createApp() {
   const app = express();
+  app.use(
+    cors({
+      origin: ["http://localhost:3001"],
+      credentials: true,
+    })
+  );
+  app.use(cookieParser());
   app.use(express.json());
 
   app.use(
