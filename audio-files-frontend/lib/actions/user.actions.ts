@@ -15,10 +15,17 @@ export async function login(username: string, password: string) {
         withCredentials: true,
       }
     );
-    console.log(response.data);
-    console.log(response.headers["set-cookie"]);
+    const backendCookie = response.headers["set-cookie"];
+    console.log(`backendCookie: ${backendCookie}`);
+    // if (backendCookie && backendCookie.length > 0) {
+    //   const [cookieNameValue, ...cookieAttributes] =
+    //     backendCookie[0].split("; ");
+    //   const [cookieName, cookieValue] = cookieNameValue.split("=");
+    // }
+    // console.log(response.data);
 
     const setCookieHeader = response.headers["set-cookie"];
+
     let cookiesString = "";
 
     if (setCookieHeader) {
@@ -36,38 +43,47 @@ export async function login(username: string, password: string) {
         });
       });
     }
-    console.log(setCookieHeader);
+    console.log(`cookiesString: ${cookiesString}`);
+    // console.log(`cookiesString: ${cookiesString}`);
 
     // Use the cookies in another Axios call
-    const anotherResponse = await axios.get(
-      "http://localhost:3000/auth/status",
-      {
-        withCredentials: true,
-        headers: {
-          Cookie: cookiesString,
-        },
-      }
-    );
-    console.log(`Login cookiesString: ${cookiesString}`);
-    console.log(anotherResponse.data);
+    // const anotherResponse = await axios.get(
+    //   "http://localhost:3000/auth/status",
+    //   {
+    //     withCredentials: true,
+    //     headers: {
+    //       Cookie: cookiesString,
+    //     },
+    //   }
+    // );
   } catch (error) {
     console.error(error);
   }
 }
 
 export async function getCurrentUser() {
+  console.log("getCurrentUser");
   const backendCookie = `connect.sid=${
     cookies().get("backend.connect.sid")?.value
   }`;
   console.log(`backendCookie: ${backendCookie}; `);
 
-  const anotherResponse = await axios.get("http://localhost:3000/auth/status", {
-    withCredentials: true,
-    headers: {
-      Cookie: backendCookie,
-    },
-  });
-  console.log(anotherResponse.data);
+  try {
+    const anotherResponse = await axios.get(
+      "http://localhost:3000/auth/status",
+      {
+        withCredentials: true,
+        headers: {
+          Cookie: backendCookie,
+        },
+      }
+    );
+    console.log(anotherResponse.data);
+    return anotherResponse.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 export async function getLoggedInUser() {

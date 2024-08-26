@@ -32,20 +32,6 @@ interface UserProviderProps {
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/auth/status', { withCredentials: true });
-        setUser(response.data);
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-        setUser(null);
-      }
-    };
-
-    fetchUser();
-  }, []);
-
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}
