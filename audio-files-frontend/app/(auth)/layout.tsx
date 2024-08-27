@@ -1,7 +1,4 @@
-import { getCurrentUser, getLoggedInUser } from "@/lib/actions";
-import { UserProvider, useUser } from "@/providers/UserProvider";
-import { redirect } from "next/navigation";
-import { useEffect } from "react";
+import { UserProvider } from "@/providers/UserProvider";
 
 export default async function RootLayout({
   children,

@@ -13,21 +13,10 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import axios from "axios"
 import { uploadAudio } from "@/lib/actions"
 
 const UploadAudioDialog = () => {
-  const { register, handleSubmit } = useForm();
-
-  const onSubmit = async (audio: any) => {
-    const data = new FormData();
-    data.append('file', audio.file[0]);
-
-
-    // console.log(audio);
-
-    uploadAudio(data);
-  };
+  const { register } = useForm();
 
   return (
     <Dialog>
@@ -41,26 +30,26 @@ const UploadAudioDialog = () => {
             Upload audio here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form action={uploadAudio}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Username
+              <Label htmlFor="description" className="text-right">
+                Description
               </Label>
               <Input
-                id="username"
-                {...register("username")}
+                id="description"
+                {...register("description")}
                 defaultValue=""
                 className="col-span-3"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="displayName" className="text-right">
-                Display Name
+              <Label htmlFor="category" className="text-right">
+                Category
               </Label>
               <Input
-                id="displayname"
-                {...register("displayName")}
+                id="category"
+                {...register("category")}
                 defaultValue=""
                 className="col-span-3"
               />
@@ -77,11 +66,11 @@ const UploadAudioDialog = () => {
               />
             </div>
           </div>
-          {/* <DialogTrigger asChild> */}
-          <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
-          {/* </DialogTrigger> */}
+          <DialogTrigger asChild>
+            <DialogFooter>
+              <Button type="submit">Save changes</Button>
+            </DialogFooter>
+          </DialogTrigger>
         </form>
       </DialogContent>
     </Dialog >
