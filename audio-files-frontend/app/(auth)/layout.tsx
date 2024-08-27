@@ -1,5 +1,3 @@
-import { UserProvider } from "@/providers/UserProvider";
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -8,9 +6,7 @@ export default async function RootLayout({
   return (
     <main className="flex h-screen w-full font-inter">
       <div className="flex size-full flex-col p-10">
-        <UserProvider>
-          {children}
-        </UserProvider>
+        {children}
       </div>
     </main>
   );
