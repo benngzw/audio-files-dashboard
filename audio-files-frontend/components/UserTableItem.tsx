@@ -4,6 +4,7 @@ import {
 } from "@/components/ui/table"
 import { deleteUser } from "@/lib/actions";
 import { Button } from "./ui/button";
+import UpdateUserDialog from "./UpdateUserDialog";
 
 const UserTableItem = ({ user }: { user: User }) => {
   const handleDelete = async (userId: string) => {
@@ -20,6 +21,7 @@ const UserTableItem = ({ user }: { user: User }) => {
       <TableCell>{user.isAdmin ? "Admin" : "User"}</TableCell>
       <TableCell>{user.displayName}</TableCell>
       <TableCell className="text-right">
+        <UpdateUserDialog user={user} />
         <Button onClick={() => handleDelete(user.id)}>Delete</Button>
       </TableCell>
     </TableRow>

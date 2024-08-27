@@ -84,6 +84,25 @@ export async function getAllUsers(): Promise<User[] | null> {
   }
 }
 
+export async function updateUser(userId: string, user: User) {
+  const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
+  try {
+    console.log(user);
+    console.log(userId);
+    const response = await axios.put(`/users/${userId}`, user, {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+    console.log(response.data);
+    revalidatePath("/");
+  } catch (error) {
+    // console.error(error);
+    console.log("Failed to update user");
+    return null;
+  }
+}
+
 export async function deleteUser(userId: string) {
   const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
   try {

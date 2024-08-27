@@ -23,7 +23,7 @@ const UserTable = ({ users }: { users: User[] }) => {
       <TableBody>
         {users && users.length > 0 ? (
           users.map((user: User) => (
-            <UserTableItem user={user} />
+            <UserTableItem key={user.id} user={user} />
           ))
         ) : null}
       </TableBody>
