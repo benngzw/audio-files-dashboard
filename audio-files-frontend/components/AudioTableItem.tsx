@@ -2,7 +2,7 @@ import {
   TableCell,
   TableRow,
 } from "@/components/ui/table"
-import { deleteAudio, downloadAudio, streamAudio } from "@/lib/actions";
+import { deleteAudio } from "@/lib/actions";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import AudioPlayerDialog from "./AudioPlayerDialog";
