@@ -2,7 +2,10 @@ import { Router } from "express";
 import { checkSchema } from "express-validator";
 
 import * as UserController from "../controllers/userController";
-import { createUserValidationSchema } from "../utils/validationSchemas";
+import {
+  createUserValidationSchema,
+  updateUserValidationSchema,
+} from "../utils/validationSchemas";
 import { requireAdmin, requireCurrentUserOrAdmin } from "../middlewares";
 
 const router = Router();
@@ -194,7 +197,7 @@ router.post(
  */
 router.put(
   "/:id",
-  checkSchema(createUserValidationSchema),
+  checkSchema(updateUserValidationSchema),
   requireCurrentUserOrAdmin,
   UserController.updateUser
 );
