@@ -7,8 +7,12 @@ import { AudioFileModel } from "../models/audioModel";
 const storageClient = StorageService.createStorageClient();
 
 export async function uploadAudioFiles(req: Request, res: Response) {
-  const { files } = req;
+  const {
+    files,
+    body: { description, category },
+  } = req;
   const user = req.user as User;
+  console.log(`description: ${description}, category: ${category}`);
   if (!files || !Array.isArray(files) || files.length === 0)
     return res.status(400).send({ error: "No file uploaded" });
 
@@ -26,6 +30,8 @@ export async function uploadAudioFiles(req: Request, res: Response) {
           mimeType: file.mimetype,
           size: file.size,
           storagePath,
+          description,
+          category,
         });
 
         return await audioMetadata.save();
@@ -38,6 +44,8 @@ export async function uploadAudioFiles(req: Request, res: Response) {
           fileName: file.fileName,
           mimeType: file.mimeType,
           size: file.size,
+          description,
+          category,
         };
       })
     );
@@ -49,9 +57,7 @@ export async function uploadAudioFiles(req: Request, res: Response) {
 
 export async function getAudioFiles(req: Request, res: Response) {
   const user = req.user as User;
-  const audioFiles = await AudioFileModel.find({ userId: user.id })
-    .select("_id fileName mimeType size")
-    .lean();
+  const audioFiles = await AudioFileModel.find({ userId: user.id }).lean();
 
   return res.status(200).send(
     audioFiles.map((file) => {
@@ -60,6 +66,8 @@ export async function getAudioFiles(req: Request, res: Response) {
         fileName: file.fileName,
         mimeType: file.mimeType,
         size: file.size,
+        description: file.description,
+        category: file.category,
       };
     })
   );

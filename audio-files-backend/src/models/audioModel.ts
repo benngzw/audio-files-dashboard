@@ -7,6 +7,8 @@ export interface AudioFile {
   mimeType: string;
   size: number;
   storagePath: string;
+  description?: string;
+  category?: string;
 }
 
 const AudioFileSchema = new Schema({
@@ -16,6 +18,8 @@ const AudioFileSchema = new Schema({
   mimeType: { type: String, required: true },
   size: { type: Number, required: true },
   storagePath: { type: String, required: true },
+  description: { type: String },
+  category: { type: String },
 });
 
 export const AudioFileModel: Model<AudioFile> = model<
