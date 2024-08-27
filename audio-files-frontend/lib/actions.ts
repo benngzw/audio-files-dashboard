@@ -3,10 +3,12 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 
+axios.defaults.baseURL = "http://localhost:3000";
+
 export async function login(username: string, password: string) {
   try {
     const response = await axios.post(
-      "http://localhost:3000/auth/login",
+      "/auth/login",
       {
         username,
         password,
@@ -33,7 +35,7 @@ export async function logout() {
   const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
   try {
     await axios.post(
-      "http://localhost:3000/auth/logout",
+      "/auth/logout",
       {},
       {
         headers: {
@@ -50,7 +52,7 @@ export async function logout() {
 export async function getCurrentUser() {
   const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
   try {
-    const response = await axios.get("http://localhost:3000/auth/status", {
+    const response = await axios.get("/auth/status", {
       headers: {
         Cookie: cookie,
       },
@@ -67,7 +69,7 @@ export async function getCurrentUser() {
 export async function getUserAudio() {
   const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
   try {
-    const response = await axios.get("http://localhost:3000/audio", {
+    const response = await axios.get("/audio", {
       headers: {
         Cookie: cookie,
       },
