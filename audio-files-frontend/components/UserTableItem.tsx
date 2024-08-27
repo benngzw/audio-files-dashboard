@@ -22,7 +22,7 @@ const UserTableItem = ({ user }: { user: User }) => {
       <TableCell>{user.displayName}</TableCell>
       <TableCell className="text-right">
         <UpdateUserDialog user={user} />
-        <Button onClick={() => handleDelete(user.id)}>Delete</Button>
+        <Button className="mx-2" onClick={() => handleDelete(user.id)}>Delete</Button>
       </TableCell>
     </TableRow>
   )
