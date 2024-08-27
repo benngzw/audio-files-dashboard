@@ -36,7 +36,7 @@ const AuthForm = () => {
   const onSubmit = async (credentials: any) => {
     const user = await loginClient(credentials.username, credentials.password);
     if (user) {
-      router.push("/audio-dashboard");
+      router.push("/");
     } else {
       setErrorMessage("Invalid username or password");
     }

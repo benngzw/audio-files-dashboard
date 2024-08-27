@@ -1,9 +1,17 @@
 import React from 'react'
 
-const Home = () => {
+import AudioTable from '@/components/AudioTable';
+import UploadAudioDialog from '@/components/UploadAudioDialog';
+import { getUserAudio } from '@/lib/actions';
+
+const Home = async () => {
+  const userAudio: Audio[] = await getUserAudio() || [];
+
   return (
     <section>
-      <h1>Home</h1>
+      <h1>Audio Dashboard</h1>
+      <AudioTable audio={userAudio} />
+      <UploadAudioDialog />
     </section>
   )
 }
