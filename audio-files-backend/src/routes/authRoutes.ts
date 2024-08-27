@@ -40,7 +40,7 @@ const router = Router();
  */
 // TODO: Update swagger responses
 router.post("/login", passport.authenticate("local"), (req, res) => {
-  console.log(req.user);
+  console.log("/login called");
   const user = req.user as User;
   res.status(200).send({
     id: user.id,
@@ -67,6 +67,7 @@ router.post("/login", passport.authenticate("local"), (req, res) => {
  *         description: Access denied
  */
 router.post("/logout", (req, res) => {
+  console.log("/logout called");
   if (!req.user) return res.status(403).send({ error: "Access Denied" });
   req.logout((err) => {
     if (err) return res.sendStatus(400);
@@ -77,8 +78,16 @@ router.post("/logout", (req, res) => {
 // TODO: Remove after testing
 router.get("/status", (req, res) => {
   console.log("/auth/status called");
-  console.log(req.user);
-  return req.user ? res.send(req.user) : res.sendStatus(401);
+  const user = req.user as User;
+  console.log(user);
+  if (user)
+    return res.status(200).send({
+      id: user.id,
+      username: user.username,
+      displayName: user.displayName,
+      isAdmin: user.isAdmin,
+    });
+  return res.sendStatus(401);
 });
 
 export default router;
