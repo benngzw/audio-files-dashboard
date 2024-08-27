@@ -1,27 +1,15 @@
 import React from 'react'
-import { deleteUser, getAllUsers } from '@/lib/actions';
-import UserListItem from '@/components/UserListItem'
+import { getAllUsers } from '@/lib/actions';
+import UserTable from '@/components/UserTable';
 
 const UserAdmin = async () => {
-  const allUsers: User[] | null = await getAllUsers();
-
-  const handleDelete = async (userId: string) => {
-    try {
-      await deleteUser(userId);
-    } catch (error) {
-      console.error('Failed to delete user:', error);
-    }
-  };
+  const allUsers: User[] = await getAllUsers() || [];
 
   return (
-    <section><h1>User Admin</h1>
-      <ul>
-        {allUsers && allUsers.length > 0 ? (
-          allUsers.map((user: User) => (
-            <UserListItem key={user.id} user={user} />
-          ))
-        ) : null}
-      </ul></section>
+    <section>
+      <h1>User Admin</h1>
+      <UserTable users={allUsers} />
+    </section>
   )
 }
 
