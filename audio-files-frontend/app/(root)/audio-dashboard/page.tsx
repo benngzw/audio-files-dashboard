@@ -1,4 +1,5 @@
 import AudioTable from '@/components/AudioTable';
+import UploadAudioDialog from '@/components/UploadAudioDialog';
 import { getUserAudio } from '@/lib/actions';
 import React from 'react'
 
@@ -9,6 +10,7 @@ const AudioDashboard = async () => {
     <section>
       <h1>User Admin</h1>
       <AudioTable audio={userAudio} />
+      <UploadAudioDialog />
     </section>
   )
 }

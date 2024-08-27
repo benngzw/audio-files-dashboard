@@ -11,4 +11,6 @@ declare type Audio = {
   fileName: string;
   mimeType: string;
   size: number;
+  description: string;
+  category: string;
 };

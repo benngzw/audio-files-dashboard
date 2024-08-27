@@ -150,3 +150,19 @@ export async function deleteAudio(audioId: string) {
     console.log("Failed to delete audio");
   }
 }
+
+export async function uploadAudio(formData: FormData) {
+  const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
+  try {
+    const response = await axios.post("/audio", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Cookie: cookie,
+      },
+      withCredentials: true,
+    });
+    console.log("Upload successful:", response.data);
+  } catch (error) {
+    console.error("Upload failed:", error);
+  }
+}
