@@ -1,6 +1,7 @@
 "use server";
 
 import axios from "axios";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 axios.defaults.baseURL = "http://localhost:3000";
@@ -61,8 +62,40 @@ export async function getCurrentUser() {
     return response.data;
   } catch (error) {
     // console.error(error);
-    console.log("Failed to get current user");
+    console.log("Failed to retrieve current user");
     return null;
+  }
+}
+
+export async function getAllUsers(): Promise<User[] | null> {
+  const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
+  try {
+    const response = await axios.get("/users", {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    // console.error(error);
+    console.log("Failed to retrieve users");
+    return null;
+  }
+}
+
+export async function deleteUser(userId: string) {
+  const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
+  try {
+    await axios.delete(`/users/${userId}`, {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+    revalidatePath("/");
+  } catch (error) {
+    // console.error(error);
+    console.log("Failed to delete user");
   }
 }
 

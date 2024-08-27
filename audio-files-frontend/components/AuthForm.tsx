@@ -1,20 +1,13 @@
 "use client";
 
 import React, { useState } from 'react'
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
-
-// import { useUser } from "@/providers/UserProvider"
 import { getCurrentUser, getUserAudio, login, logout } from '@/lib/actions';
-import { get } from 'http';
 
 const AuthForm = () => {
-  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // const { user, setUser } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
