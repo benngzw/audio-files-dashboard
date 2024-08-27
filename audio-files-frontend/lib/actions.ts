@@ -16,16 +16,12 @@ export async function login(username: string, password: string) {
       }
     );
     const setCookieHeader = response.headers["set-cookie"];
+    console.log(setCookieHeader);
     if (setCookieHeader) {
       setCookieHeader.forEach((cookieString: string) => {
-        const [cookieNameValue, ...cookieAttributes] = cookieString.split("; ");
-        const [cookieName, cookieValue] = cookieNameValue.split("=");
-        cookies().set(cookieName, cookieValue, {
-          path: "/",
-          ...Object.fromEntries(
-            cookieAttributes.map((attr) => attr.split("="))
-          ),
-        });
+        const [cookieName, ...cookieValue] = cookieString.split("=");
+        console.log(cookieValue.join("="));
+        cookies().set(cookieName, cookieValue.join("="));
       });
     }
   } catch (error) {
@@ -33,36 +29,54 @@ export async function login(username: string, password: string) {
   }
 }
 
+export async function logout() {
+  const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
+  try {
+    await axios.post(
+      "http://localhost:3000/auth/logout",
+      {},
+      {
+        headers: {
+          Cookie: cookie,
+        },
+      }
+    );
+  } catch (error) {
+    // console.error(error);
+    console.log("Failed to logout");
+  }
+}
+
 export async function getCurrentUser() {
-  const backendCookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
+  const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
   try {
     const response = await axios.get("http://localhost:3000/auth/status", {
-      withCredentials: true,
       headers: {
-        Cookie: backendCookie,
+        Cookie: cookie,
       },
     });
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
+    console.log("Failed to get current user");
     return null;
   }
 }
 
 export async function getUserAudio() {
-  const backendCookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
+  const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
   try {
     const response = await axios.get("http://localhost:3000/audio", {
-      withCredentials: true,
       headers: {
-        Cookie: backendCookie,
+        Cookie: cookie,
       },
     });
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
+    console.log("Failed to get user audio");
     return null;
   }
 }

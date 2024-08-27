@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 
 // import { useUser } from "@/providers/UserProvider"
-import { getCurrentUser, getUserAudio, login } from '@/lib/actions';
+import { getCurrentUser, getUserAudio, login, logout } from '@/lib/actions';
 import { get } from 'http';
 
 const AuthForm = () => {
@@ -24,6 +24,10 @@ const AuthForm = () => {
   const handleLogClick = async () => {
     await getCurrentUser();
     await getUserAudio();
+  };
+
+  const handleLogoutClick = async () => {
+    await logout();
   };
 
   return (
@@ -50,6 +54,8 @@ const AuthForm = () => {
         <Button type="submit">Submit</Button>
 
         <Button type="button" onClick={handleLogClick}>Log Something</Button>
+
+        <Button type="button" onClick={handleLogoutClick}>Logout</Button>
       </form>
     </section>
   );
