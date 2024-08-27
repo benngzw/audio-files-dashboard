@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState } from 'react'
+import React from 'react'
+import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 import { getCurrentUser, getUserAudio, logout } from '@/lib/actions';
 import { loginClient } from '@/lib/client-actons';
 
 const AuthForm = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit } = useForm();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await loginClient(username, password);
-  };
+  const onSubmit = async (credentials: any) => {
+    console.log(credentials);
+    await loginClient(credentials.username, credentials.password);
+  }
 
   const handleLogClick = async () => {
     await getCurrentUser();
@@ -26,14 +26,13 @@ const AuthForm = () => {
 
   return (
     <section>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="username">Username:</label>
           <Input
             type="text"
             id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            {...register("username")}
           />
         </div>
         <div>
@@ -41,8 +40,7 @@ const AuthForm = () => {
           <Input
             type="password"
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            {...register("password")}
           />
         </div>
         <Button type="submit">Submit</Button>
