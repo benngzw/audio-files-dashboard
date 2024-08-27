@@ -15,8 +15,10 @@ const Home = async () => {
   return (
     <section>
       <h1>Audio Dashboard</h1>
+      <div className="text-right">
+        <UploadAudioDialog />
+      </div>
       <AudioTable audio={userAudio} backendHost={BACKEND_HOST} />
-      <UploadAudioDialog />
     </section>
   )
 }

@@ -24,7 +24,7 @@ const AudioTableItem = ({ audio, backendHost }: { audio: Audio, backendHost: str
       <TableCell>{audio.size}</TableCell>
       <TableCell className="text-right">
         <AudioPlayerDialog audio={audio} backendHost={backendHost} />
-        <Button onClick={handleDelete}>Delete</Button>
+        <Button className="mx-2" onClick={handleDelete}>Delete</Button>
       </TableCell>
     </TableRow>
   )

@@ -4,10 +4,9 @@ import Link from 'next/link'
 import React from 'react'
 import { Button } from './ui/button'
 import { logout } from '@/lib/actions'
-import { redirect } from 'next/navigation'
 import { useRouter } from 'next/router'
 
-const SideBar = async () => {
+const SideBar = async ({ isAdmin }: { isAdmin: boolean }) => {
   const signOut = async () => {
     try {
       await logout();
@@ -26,11 +25,13 @@ const SideBar = async () => {
             Home
           </Link>
         </li>
-        <li>
-          <Link href="/user-admin" className="text-black">
-            User Admin
-          </Link>
-        </li>
+        {isAdmin && (
+          <li>
+            <Link href="/user-admin" className="text-black">
+              User Admin
+            </Link>
+          </li>
+        )}
         <li>
           <Button
             onClick={signOut}

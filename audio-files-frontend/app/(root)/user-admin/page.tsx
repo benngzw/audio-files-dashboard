@@ -1,9 +1,12 @@
 import React from 'react'
-import { getAllUsers } from '@/lib/actions';
+import { getAllUsers, getCurrentUser } from '@/lib/actions';
 import UserTable from '@/components/UserTable';
 import CreateUserDialog from '@/components/CreateUserDialog';
+import { redirect } from 'next/navigation';
 
 const UserAdmin = async () => {
+  const currentUser = await getCurrentUser();
+  if (!currentUser?.isAdmin) redirect("/");
   const allUsers: User[] = await getAllUsers() || [];
 
   return (
