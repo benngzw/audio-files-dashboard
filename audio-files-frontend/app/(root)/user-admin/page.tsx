@@ -8,9 +8,13 @@ const UserAdmin = async () => {
 
   return (
     <section>
-      <h1>User Admin</h1>
+      <div>
+        <h1>User Admin</h1>
+        <div className="text-right">
+          <CreateUserDialog />
+        </div>
+      </div>
       <UserTable users={allUsers} />
-      <CreateUserDialog />
     </section>
   )
 }

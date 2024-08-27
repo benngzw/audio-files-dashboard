@@ -25,7 +25,7 @@ const CreateUserDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Create</Button>
+        <Button variant="outline">Create User</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
