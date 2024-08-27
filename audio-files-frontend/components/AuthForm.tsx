@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ const formSchema = z.object({
 })
 
 const AuthForm = () => {
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,11 +35,25 @@ const AuthForm = () => {
 
   const onSubmit = async (credentials: any) => {
     const user = await loginClient(credentials.username, credentials.password);
-    if (user) router.push("/audio-dashboard");
+    if (user) {
+      router.push("/audio-dashboard");
+    } else {
+      setErrorMessage("Invalid username or password");
+    }
   }
 
   return (
-    <section>
+    <section className="flex min-h-screen w-full max-w-[420px] flex-col justify-center gap-5 py-10 md:gap-8">
+      <header className='flex flex-col gap-5 md:gap-8'>
+        <div className="flex flex-col gap-1 md:gap-3">
+          <h1 className="text-[36px] font-semibold text-gray-900">
+            Sign In
+          </h1>
+          <p className="text-[16px] font-normal text-gray-600">
+            Please enter your details
+          </p>
+        </div>
+      </header>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -48,7 +63,7 @@ const AuthForm = () => {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input placeholder='Enter your username' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -61,16 +76,21 @@ const AuthForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input type="password" placeholder='Enter your password' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          {errorMessage && (
+            <FormMessage>
+              {errorMessage}
+            </FormMessage>
+          )}
+          <Button type="submit" className="w-full">Submit</Button>
         </form>
       </Form>
-    </section>
+    </section >
   );
 }
 

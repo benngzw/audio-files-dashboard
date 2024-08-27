@@ -4,10 +4,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex h-screen w-full font-inter">
-      <div className="flex size-full flex-col p-10">
-        {children}
-      </div>
+    <main className="flex min-h-screen w-full justify-between font-inter">
+      {children}
     </main>
   );
 }
