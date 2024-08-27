@@ -1,10 +1,14 @@
 "use server";
 
 import axios from "axios";
+import dotenv from "dotenv";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-axios.defaults.baseURL = "http://localhost:3000";
+dotenv.config();
+
+axios.defaults.baseURL =
+  process.env.BACKEND_PRIVATE_HOST || "http://localhost:3000";
 
 export async function logout() {
   const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;

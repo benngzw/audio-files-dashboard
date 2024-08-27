@@ -6,7 +6,7 @@ import { deleteAudio } from "@/lib/actions";
 import { Button } from "./ui/button";
 import AudioPlayerDialog from "./AudioPlayerDialog";
 
-const AudioTableItem = ({ audio }: { audio: Audio }) => {
+const AudioTableItem = ({ audio, backendHost }: { audio: Audio, backendHost: string }) => {
   const handleDelete = async () => {
     try {
       await deleteAudio(audio.id);
@@ -23,7 +23,7 @@ const AudioTableItem = ({ audio }: { audio: Audio }) => {
       <TableCell>{audio.mimeType}</TableCell>
       <TableCell>{audio.size}</TableCell>
       <TableCell className="text-right">
-        <AudioPlayerDialog audio={audio} />
+        <AudioPlayerDialog audio={audio} backendHost={backendHost} />
         <Button onClick={handleDelete}>Delete</Button>
       </TableCell>
     </TableRow>

@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-const AudioPlayerDialog = ({ audio }: { audio: Audio }) => {
+const AudioPlayerDialog = ({ audio, backendHost }: { audio: Audio, backendHost: string }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -20,7 +20,7 @@ const AudioPlayerDialog = ({ audio }: { audio: Audio }) => {
           <DialogTitle>{audio.fileName}</DialogTitle>
         </DialogHeader>
         <audio controls>
-          <source src={`http://localhost:3000/audio/${audio.id}/stream`} type={audio.mimeType} />
+          <source src={`${backendHost}/audio/${audio.id}/stream`} type={audio.mimeType} />
           Your browser does not support the audio element.
         </audio>
       </DialogContent>

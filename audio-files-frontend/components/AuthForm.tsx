@@ -18,11 +18,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
-  username: z.string().min(3).max(25),
-  password: z.string().min(6).max(25),
+  username: z.string().min(5).max(25),
+  password: z.string().min(5).max(25),
 })
 
-const AuthForm = () => {
+const AuthForm = ({ backendHost }: { backendHost: string }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,8 +34,9 @@ const AuthForm = () => {
   })
 
   const onSubmit = async (credentials: any) => {
-    const user = await loginClient(credentials.username, credentials.password);
+    const user = await loginClient(credentials.username, credentials.password, backendHost);
     if (user) {
+      console.log("Submmitted!")
       router.push("/");
     } else {
       setErrorMessage("Invalid username or password");

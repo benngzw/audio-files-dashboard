@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table"
 import AudioTableItem from "./AudioTableItem";
 
-const AudioTable = ({ audio }: { audio: Audio[] }) => {
+const AudioTable = ({ audio, backendHost }: { audio: Audio[], backendHost: string }) => {
   return (
     <Table>
       <TableHeader>
@@ -25,7 +25,7 @@ const AudioTable = ({ audio }: { audio: Audio[] }) => {
       <TableBody>
         {audio && audio.length > 0 ? (
           audio.map((singleAudio: Audio) => (
-            <AudioTableItem key={singleAudio.id} audio={singleAudio} />
+            <AudioTableItem key={singleAudio.id} audio={singleAudio} backendHost={backendHost} />
           ))
         ) : null}
       </TableBody>
