@@ -5,3 +5,10 @@ declare type User = {
   displayName: string;
   isAdmin: boolean;
 };
+
+declare type Audio = {
+  id: string;
+  fileName: string;
+  mimeType: string;
+  size: number;
+};

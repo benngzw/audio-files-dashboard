@@ -134,3 +134,19 @@ export async function getUserAudio() {
     return null;
   }
 }
+
+export async function deleteAudio(audioId: string) {
+  const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
+  console.log(`Deleting audio with id: ${audioId}`);
+  try {
+    await axios.delete(`/audio/${audioId}`, {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+    revalidatePath("/");
+  } catch (error) {
+    // console.error(error);
+    console.log("Failed to delete audio");
+  }
+}
