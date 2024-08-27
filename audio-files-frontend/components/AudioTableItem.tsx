@@ -4,12 +4,9 @@ import {
 } from "@/components/ui/table"
 import { deleteAudio } from "@/lib/actions";
 import { Button } from "./ui/button";
-import { useState } from "react";
 import AudioPlayerDialog from "./AudioPlayerDialog";
 
 const AudioTableItem = ({ audio }: { audio: Audio }) => {
-  const [audioSrc, setAudioSrc] = useState<string | null>(null);
-
   const handleDelete = async () => {
     try {
       await deleteAudio(audio.id);

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function loginClient(username: string, password: string) {
   try {
-    await axios.post(
+    const response = await axios.post(
       "http://localhost:3000/auth/login",
       {
         username,
@@ -12,8 +12,9 @@ export async function loginClient(username: string, password: string) {
         withCredentials: true,
       }
     );
-    console.log("logged in on client");
+    return response.data;
   } catch (error) {
     console.error(error);
+    return null;
   }
 }

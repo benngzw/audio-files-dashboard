@@ -2,53 +2,74 @@
 
 import React from 'react'
 import { useForm } from "react-hook-form"
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from '@/components/ui/input';
-import { getCurrentUser, getUserAudio, logout } from '@/lib/actions';
-import { loginClient } from '@/lib/client-actons';
+import { loginClient } from '@/lib/client-actions';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+
+const formSchema = z.object({
+  username: z.string().min(3).max(25),
+  password: z.string().min(6).max(25),
+})
 
 const AuthForm = () => {
-  const { register, handleSubmit } = useForm();
+  const router = useRouter();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: ""
+    }
+  })
 
   const onSubmit = async (credentials: any) => {
-    console.log(credentials);
-    await loginClient(credentials.username, credentials.password);
+    const user = await loginClient(credentials.username, credentials.password);
+    if (user) router.push("/audio-dashboard");
   }
-
-  const handleLogClick = async () => {
-    await getCurrentUser();
-    await getUserAudio();
-  };
-
-  const handleLogoutClick = async () => {
-    await logout();
-  };
 
   return (
     <section>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <Input
-            type="text"
-            id="username"
-            {...register("username")}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <Input
-            type="password"
-            id="password"
-            {...register("password")}
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <Button type="submit">Submit</Button>
-
-        <Button type="button" onClick={handleLogClick}>Log Something</Button>
-
-        <Button type="button" onClick={handleLogoutClick}>Logout</Button>
-      </form>
+          <Button type="submit">Submit</Button>
+        </form>
+      </Form>
     </section>
   );
 }
