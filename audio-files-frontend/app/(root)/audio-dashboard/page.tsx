@@ -8,7 +8,7 @@ const AudioDashboard = async () => {
 
   return (
     <section>
-      <h1>User Admin</h1>
+      <h1>Audio Dashboard</h1>
       <AudioTable audio={userAudio} />
       <UploadAudioDialog />
     </section>

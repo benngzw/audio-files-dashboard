@@ -10,7 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { streamAudio } from "@/lib/actions"
 
 const AudioPlayerDialog = ({ audio }: { audio: Audio }) => {
   return (
@@ -18,18 +17,14 @@ const AudioPlayerDialog = ({ audio }: { audio: Audio }) => {
       <DialogTrigger asChild>
         <Button variant="outline">Play</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[350px]">
         <DialogHeader>
-          <DialogTitle>Play Audio</DialogTitle>
-          <DialogDescription>
-            Upload audio here. Click save when you're done.
-          </DialogDescription>
+          <DialogTitle>{audio.fileName}</DialogTitle>
         </DialogHeader>
-        <DialogTrigger asChild>
-          <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
-        </DialogTrigger>
+        <audio controls>
+          <source src={`http://localhost:3000/audio/${audio.id}/stream`} type={audio.mimeType} />
+          Your browser does not support the audio element.
+        </audio>
       </DialogContent>
     </Dialog >
   )
