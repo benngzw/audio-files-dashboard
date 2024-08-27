@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 
 // import { useUser } from "@/providers/UserProvider"
-import { getCurrentUser, login } from '@/lib/actions/user.actions';
+import { getCurrentUser, getUserAudio, login } from '@/lib/actions';
 import { get } from 'http';
 
 const AuthForm = () => {
@@ -19,38 +19,11 @@ const AuthForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await login(username, password);
-    // try {
-    //   const response = await axios.post('http://localhost:3000/auth/login', {
-    //     username,
-    //     password,
-    //   }, {
-    //     withCredentials: true
-    //   })
-    //   console.log(response.data);
-
-    //   if (response) {
-    //     setUser({
-    //       id: response.data.id,
-    //       username: response.data.username,
-    //       displayName: response.data.displayName,
-    //       isAdmin: response.data.isAdmin,
-    //     });
-    //     console.log(user);
-    //     router.push('/sign-out')
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    // }
-
   };
 
   const handleLogClick = async () => {
-    // const anotherResponse = await axios.get("http://localhost:3000/auth/status", {
-    //   withCredentials: true
-    // })
-    // console.log(anotherResponse.data);
-    // console.log(user);
-    getCurrentUser();
+    await getCurrentUser();
+    await getUserAudio();
   };
 
   return (

@@ -36,29 +36,33 @@ export async function login(username: string, password: string) {
 export async function getCurrentUser() {
   const backendCookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
   try {
-    const anotherResponse = await axios.get(
-      "http://localhost:3000/auth/status",
-      {
-        withCredentials: true,
-        headers: {
-          Cookie: backendCookie,
-        },
-      }
-    );
-    return anotherResponse.data;
+    const response = await axios.get("http://localhost:3000/auth/status", {
+      withCredentials: true,
+      headers: {
+        Cookie: backendCookie,
+      },
+    });
+    console.log(response.data);
+    return response.data;
   } catch (error) {
     console.error(error);
     return null;
   }
 }
 
-export async function getLoggedInUser() {
+export async function getUserAudio() {
+  const backendCookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
   try {
-    const response = await axios.get("http://localhost:3000/auth/status", {
+    const response = await axios.get("http://localhost:3000/audio", {
       withCredentials: true,
+      headers: {
+        Cookie: backendCookie,
+      },
     });
+    console.log(response.data);
     return response.data;
   } catch (error) {
+    console.error(error);
     return null;
   }
 }

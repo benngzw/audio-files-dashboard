@@ -1,4 +1,4 @@
-import { getCurrentUser, getLoggedInUser } from "@/lib/actions/user.actions";
+import { getCurrentUser } from "@/lib/actions";
 import { UserProvider } from "@/providers/UserProvider";
 import { redirect } from 'next/navigation';
 

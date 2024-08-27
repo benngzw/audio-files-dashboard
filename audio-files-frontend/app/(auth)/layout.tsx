@@ -1,4 +1,4 @@
-import { getCurrentUser, getLoggedInUser } from "@/lib/actions/user.actions";
+import { getCurrentUser, getLoggedInUser } from "@/lib/actions";
 import { UserProvider, useUser } from "@/providers/UserProvider";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
