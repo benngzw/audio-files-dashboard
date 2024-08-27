@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { loginClient } from '@/lib/client-actions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { redirectProxy } from '@/lib/actions';
 
 const formSchema = z.object({
   username: z.string().min(5).max(25),
@@ -24,7 +25,6 @@ const formSchema = z.object({
 
 const AuthForm = ({ backendHost }: { backendHost: string }) => {
   const [errorMessage, setErrorMessage] = useState("");
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,9 +35,10 @@ const AuthForm = ({ backendHost }: { backendHost: string }) => {
 
   const onSubmit = async (credentials: any) => {
     const user = await loginClient(credentials.username, credentials.password, backendHost);
+
+    console.log(user);
     if (user) {
-      console.log("Submmitted!")
-      router.push("/");
+      redirectProxy();
     } else {
       setErrorMessage("Invalid username or password");
     }

@@ -4,11 +4,16 @@ import axios from "axios";
 import dotenv from "dotenv";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 dotenv.config();
 
 axios.defaults.baseURL =
   process.env.BACKEND_PRIVATE_HOST || "http://localhost:3000";
+
+export async function redirectProxy() {
+  revalidatePath("/");
+}
 
 export async function logout() {
   const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
@@ -22,6 +27,7 @@ export async function logout() {
         },
       }
     );
+    revalidatePath("/");
   } catch (error) {
     // console.error(error);
     console.log("Failed to logout");

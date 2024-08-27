@@ -68,7 +68,6 @@ router.post("/login", passport.authenticate("local"), (req, res) => {
  */
 router.post("/logout", (req, res) => {
   console.log("/logout called");
-  console.log(req.session);
   const user = req.user as User;
   console.log(user);
   if (!req.user) return res.status(403).send({ error: "Access Denied" });

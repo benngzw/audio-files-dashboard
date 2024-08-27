@@ -17,6 +17,7 @@ export async function loginClient(
         withCredentials: true,
       }
     );
+    console.log("Response:", response.data);
     return response.data;
   } catch (error) {
     console.error(error);
