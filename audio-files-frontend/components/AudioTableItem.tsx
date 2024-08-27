@@ -4,7 +4,6 @@ import {
 } from "@/components/ui/table"
 import { deleteAudio } from "@/lib/actions";
 import { Button } from "./ui/button";
-// import UpdateUserDialog from "./UpdateUserDialog";
 
 const AudioTableItem = ({ audio }: { audio: Audio }) => {
   const handleDelete = async () => {
@@ -18,6 +17,8 @@ const AudioTableItem = ({ audio }: { audio: Audio }) => {
   return (
     <TableRow>
       <TableCell className="font-medium">{audio.fileName}</TableCell>
+      <TableCell>{audio.description}</TableCell>
+      <TableCell>{audio.category}</TableCell>
       <TableCell>{audio.mimeType}</TableCell>
       <TableCell>{audio.size}</TableCell>
       <TableCell className="text-right">

@@ -15,8 +15,10 @@ const AudioTable = ({ audio }: { audio: Audio[] }) => {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[150px]">Filename</TableHead>
+          <TableHead className="w-[150px]">Description</TableHead>
+          <TableHead className="w-[150px]">Category</TableHead>
           <TableHead className="w-[150px]">Mimetype</TableHead>
-          <TableHead className="w-[200px]">Size</TableHead>
+          <TableHead className="w-[150px]">Size</TableHead>
           <TableHead className="text-right"></TableHead>
         </TableRow>
       </TableHeader>
