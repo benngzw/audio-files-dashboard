@@ -1,6 +1,6 @@
 import AudioTable from '@/components/AudioTable';
 import UploadAudioDialog from '@/components/UploadAudioDialog';
-import { getUserAudio } from '@/lib/actions';
+import { getUserAudio, streamAudio } from '@/lib/actions';
 import React from 'react'
 
 const AudioDashboard = async () => {

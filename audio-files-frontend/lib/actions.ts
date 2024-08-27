@@ -6,32 +6,6 @@ import { cookies } from "next/headers";
 
 axios.defaults.baseURL = "http://localhost:3000";
 
-export async function login(username: string, password: string) {
-  try {
-    const response = await axios.post(
-      "/auth/login",
-      {
-        username,
-        password,
-      },
-      {
-        withCredentials: true,
-      }
-    );
-    const setCookieHeader = response.headers["set-cookie"];
-    console.log(setCookieHeader);
-    if (setCookieHeader) {
-      setCookieHeader.forEach((cookieString: string) => {
-        const [cookieName, ...cookieValue] = cookieString.split("=");
-        console.log(cookieValue.join("="));
-        cookies().set(cookieName, cookieValue.join("="));
-      });
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 export async function logout() {
   const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
   try {
@@ -164,5 +138,38 @@ export async function uploadAudio(formData: FormData) {
     console.log("Upload successful:", response.data);
   } catch (error) {
     console.error("Upload failed:", error);
+  }
+}
+
+export async function streamAudio(audioId: string) {
+  const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
+  try {
+    const response = await axios.get(`/audio/${audioId}/stream`, {
+      headers: {
+        Cookie: cookie,
+      },
+      responseType: "blob",
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to stream audio:", error);
+    return null;
+  }
+}
+
+export async function downloadAudio(audioId: string) {
+  const cookie = `connect.sid=${cookies().get("connect.sid")?.value}`;
+  try {
+    const response = await axios.get(`/audio/${audioId}/download`, {
+      headers: {
+        Cookie: cookie,
+      },
+    });
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to stream audio:", error);
+    return null;
   }
 }

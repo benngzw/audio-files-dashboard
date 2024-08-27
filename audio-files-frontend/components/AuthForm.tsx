@@ -3,7 +3,8 @@
 import React, { useState } from 'react'
 import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
-import { getCurrentUser, getUserAudio, login, logout } from '@/lib/actions';
+import { getCurrentUser, getUserAudio, logout } from '@/lib/actions';
+import { loginClient } from '@/lib/client-actons';
 
 const AuthForm = () => {
   const [username, setUsername] = useState('');
@@ -11,7 +12,7 @@ const AuthForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(username, password);
+    await loginClient(username, password);
   };
 
   const handleLogClick = async () => {
