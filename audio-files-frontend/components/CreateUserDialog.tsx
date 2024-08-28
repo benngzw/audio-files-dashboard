@@ -1,6 +1,8 @@
 "use client"
 
 import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -11,19 +13,49 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { createUser } from "@/lib/actions"
+import { useState } from "react"
+
+
+const formSchema = z.object({
+  username: z.string().min(5).max(25),
+  password: z.string().min(3).max(25),
+  displayName: z.string().max(25).optional()
+})
 
 const CreateUserDialog = () => {
-  const { register, handleSubmit } = useForm();
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+      displayName: ""
+    }
+  })
 
-  const onSubmit = (user: any) => {
-    createUser(user);
+  const onSubmit = async (user: any) => {
+    const createdUser = await createUser(user);
+    if (createdUser) {
+      setOpen(false);
+    } else {
+      setErrorMessage("Failed to create user. Username might already exist.");
+    }
+
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Create User</Button>
       </DialogTrigger>
@@ -34,48 +66,72 @@ const CreateUserDialog = () => {
             Create new user here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Username
-              </Label>
-              <Input
-                id="username"
-                {...register("username")}
-                defaultValue=""
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="displayName" className="text-right">
-                Display Name
-              </Label>
-              <Input
-                id="displayname"
-                {...register("displayName")}
-                defaultValue=""
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="password" className="text-right">
-                Password
-              </Label>
-              <Input
-                id="password"
-                {...register("password")}
-                className="col-span-3"
-                type="password"
-              />
-            </div>
-          </div>
-          <DialogTrigger asChild>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="username"
+                      placeholder="Enter your username"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="displayName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Display Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="displayName"
+                      placeholder="Enter your displayName"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="Enter your displayName"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {form.formState.errors && (
+              <FormMessage>
+                {errorMessage}
+              </FormMessage>
+            )}
+            {/* <DialogTrigger asChild> */}
             <DialogFooter>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit">Create</Button>
             </DialogFooter>
-          </DialogTrigger>
-        </form>
+            {/* </DialogTrigger> */}
+          </form>
+        </Form>
       </DialogContent>
     </Dialog >
   )

@@ -77,8 +77,9 @@ export async function createUser(user: User) {
         Cookie: cookie,
       },
     });
-    console.log(response.data);
+    // console.log(response.data);
     revalidatePath("/");
+    return response.data;
   } catch (error) {
     // console.error(error);
     console.log("Failed to create user");
