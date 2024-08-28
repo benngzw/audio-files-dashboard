@@ -30,7 +30,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      FILE_COUNT_LIMIT: 3
+      FILE_COUNT_LIMIT: 1
       FILE_SIZE_LIMIT: 10000000
       MINIO_ENDPOINT: minio
       MINIO_AUDIO_BUCKET: audio
@@ -38,4 +38,16 @@ services:
       MINIO_ROOT_PASSWORD: password123
       MONGODB_HOST: mongo
       SESSION_SECRET: 12345678
+
+  audio-files-frontend:
+    image: audio-files-frontend
+    restart: always
+    container_name: audio-files-frontend
+    ports:
+      - 3001:3001
+    environment:
+      BACKEND_HOST: http://localhost:3000
+      BACKEND_PRIVATE_HOST: http://audio-files-backend:3000
+    depends_on:
+      - audio-files-backend
       
