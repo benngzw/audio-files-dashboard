@@ -11,7 +11,6 @@ const SideBar = async ({ isAdmin }: { isAdmin: boolean }) => {
     try {
       await logout();
       console.log("Signed out");
-      useRouter().push("/");
     } catch (error) {
       console.error("Failed to sign out:", error);
     }

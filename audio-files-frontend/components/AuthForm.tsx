@@ -15,7 +15,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { loginClient } from '@/lib/client-actions';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { redirectProxy } from '@/lib/actions';
 
 const formSchema = z.object({
