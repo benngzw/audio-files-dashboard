@@ -30,6 +30,12 @@ router.use(requireUser);
  *               file:
  *                 type: string
  *                 format: binary
+ *               category:
+ *                 type: string
+ *                 example: speech
+ *               description:
+ *                 type: string
+ *                 example: National Day Speech
  *     responses:
  *       201:
  *         description: Audio file created successfully

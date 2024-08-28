@@ -1,6 +1,8 @@
 import passport from "passport";
 import { Router } from "express";
+
 import { User } from "../models/userModel";
+import * as AuthController from "../controllers/authController";
 
 const router = Router();
 
@@ -32,23 +34,30 @@ const router = Router();
  *                 example: "password123"
  *     responses:
  *       200:
- *         description: OK
+ *         description: User logged in successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "user_id"
+ *                 username:
+ *                   type: string
+ *                   example: "admin"
+ *                 displayName:
+ *                   type: string
+ *                   example: "Admin User"
+ *                 isAdmin:
+ *                   type: boolean
+ *                   example: true
  *       401:
  *         description: Invalid credentials
  *       403:
  *         description: Access denied
  */
-// TODO: Update swagger responses
-router.post("/login", passport.authenticate("local"), (req, res) => {
-  console.log("/login called");
-  const user = req.user as User;
-  res.status(200).send({
-    id: user.id,
-    username: user.username,
-    displayName: user.displayName,
-    isAdmin: user.isAdmin,
-  });
-});
+router.post("/login", passport.authenticate("local"), AuthController.login);
 
 /**
  * @swagger
@@ -66,30 +75,38 @@ router.post("/login", passport.authenticate("local"), (req, res) => {
  *       403:
  *         description: Access denied
  */
-router.post("/logout", (req, res) => {
-  console.log("/logout called");
-  const user = req.user as User;
-  console.log(user);
-  if (!req.user) return res.status(403).send({ error: "Access Denied" });
-  req.logout((err) => {
-    if (err) return res.sendStatus(400);
-    res.send(200);
-  });
-});
+router.post("/logout", AuthController.logout);
 
-router.get("/status", (req, res) => {
-  console.log("/auth/status called");
-  console.log(req.session);
-  const user = req.user as User;
-  console.log(user);
-  if (user)
-    return res.status(200).send({
-      id: user.id,
-      username: user.username,
-      displayName: user.displayName,
-      isAdmin: user.isAdmin,
-    });
-  return res.sendStatus(401);
-});
+/**
+ * @swagger
+ * /auth/status:
+ *   get:
+ *     summary: Get authentication status
+ *     description: Retrieves the status of the authenticated user.
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: User is authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "user_id"
+ *                 username:
+ *                   type: string
+ *                   example: "admin"
+ *                 displayName:
+ *                   type: string
+ *                   example: "Admin User"
+ *                 isAdmin:
+ *                   type: boolean
+ *                   example: true
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/status", AuthController.status);
 
 export default router;
