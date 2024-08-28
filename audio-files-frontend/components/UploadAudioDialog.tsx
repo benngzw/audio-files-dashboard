@@ -1,7 +1,6 @@
 "use client"
 
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -25,16 +24,13 @@ import {
 import { uploadAudio } from "@/lib/actions"
 
 const audioCategories = [
-  { value: 'pop', label: 'Pop' },
-  { value: 'rock', label: 'Rock' },
-  { value: 'jazz', label: 'Jazz' },
-  { value: 'classical', label: 'Classical' },
-  { value: 'hiphop', label: 'Hip-Hop' },
-  { value: 'electronic', label: 'Electronic' },
-  { value: 'country', label: 'Country' },
-  { value: 'blues', label: 'Blues' },
-  { value: 'reggae', label: 'Reggae' },
-  { value: 'folk', label: 'Folk' },
+  { value: 'music', label: 'Music' },
+  { value: 'speech', label: 'Speech' },
+  { value: 'sound_effects', label: 'Sound Effects' },
+  { value: 'gaming', label: 'Gaming' },
+  { value: 'educational', label: 'Educational' },
+  { value: 'therapeutic', label: 'Therapeutic' },
+  { value: 'audiobooks', label: 'Audiobooks' },
 ];
 
 const UploadAudioDialog = () => {
@@ -71,7 +67,7 @@ const UploadAudioDialog = () => {
               </Label>
               <Select {...register("category")}>
                 <SelectTrigger className="w-[280px]">
-                  <SelectValue placeholder="Select a timezone" />
+                  <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
                   {audioCategories.map((category) => (
@@ -83,8 +79,8 @@ const UploadAudioDialog = () => {
               </Select>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="password" className="text-right">
-                Password
+              <Label htmlFor="file" className="text-right">
+                Audio File
               </Label>
               <Input
                 id="file"
